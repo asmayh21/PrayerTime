@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		726A5E092EDB77A100B9FDFF /* PrayerTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = PrayerTime.app; path = "/Users/asma/Desktop/PrayerTime/build/Debug-iphoneos/PrayerTime.app"; sourceTree = "<absolute>"; };
-		726A5E162EDB77A200B9FDFF /* PrayerTimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = PrayerTimeTests.xctest; path = "/Users/asma/Desktop/PrayerTime/build/Debug-iphoneos/PrayerTime.app/PlugIns/PrayerTimeTests.xctest"; sourceTree = "<absolute>"; };
-		726A5E202EDB77A200B9FDFF /* PrayerTimeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = PrayerTimeUITests.xctest; path = "/Users/asma/Desktop/PrayerTime/build/Debug-iphoneos/PrayerTimeUITests-Runner.app/PlugIns/PrayerTimeUITests.xctest"; sourceTree = "<absolute>"; };
+		561F253A2EDD9184006F0859 /* PrayerTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrayerTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		561F253B2EDD9184006F0859 /* PrayerTimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrayerTimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		561F253C2EDD9184006F0859 /* PrayerTimeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrayerTimeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -66,6 +66,9 @@
 			isa = PBXGroup;
 			children = (
 				726A5E0B2EDB77A100B9FDFF /* PrayerTime */,
+				561F253A2EDD9184006F0859 /* PrayerTime.app */,
+				561F253B2EDD9184006F0859 /* PrayerTimeTests.xctest */,
+				561F253C2EDD9184006F0859 /* PrayerTimeUITests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,7 +94,7 @@
 			packageProductDependencies = (
 			);
 			productName = PrayerTime;
-			productReference = 726A5E092EDB77A100B9FDFF /* PrayerTime.app */;
+			productReference = 561F253A2EDD9184006F0859 /* PrayerTime.app */;
 			productType = "com.apple.product-type.application";
 		};
 		726A5E152EDB77A200B9FDFF /* PrayerTimeTests */ = {
@@ -111,7 +114,7 @@
 			packageProductDependencies = (
 			);
 			productName = PrayerTimeTests;
-			productReference = 726A5E162EDB77A200B9FDFF /* PrayerTimeTests.xctest */;
+			productReference = 561F253B2EDD9184006F0859 /* PrayerTimeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		726A5E1F2EDB77A200B9FDFF /* PrayerTimeUITests */ = {
@@ -131,7 +134,7 @@
 			packageProductDependencies = (
 			);
 			productName = PrayerTimeUITests;
-			productReference = 726A5E202EDB77A200B9FDFF /* PrayerTimeUITests.xctest */;
+			productReference = 561F253C2EDD9184006F0859 /* PrayerTimeUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
