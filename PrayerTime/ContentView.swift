@@ -1,24 +1,15 @@
-//
-//  ContentView.swift
-//  PrayerTime
-//
-//  Created by asma  on 08/06/1447 AH.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var viewModel = PrayerViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        PrayerTimesView(viewModel: viewModel)
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }

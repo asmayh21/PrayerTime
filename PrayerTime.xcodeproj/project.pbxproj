@@ -24,25 +24,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		726A5E092EDB77A100B9FDFF /* PrayerTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrayerTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		726A5E162EDB77A200B9FDFF /* PrayerTimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrayerTimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		726A5E202EDB77A200B9FDFF /* PrayerTimeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrayerTimeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		726A5E092EDB77A100B9FDFF /* PrayerTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = PrayerTime.app; path = "/Users/asma/Desktop/PrayerTime/build/Debug-iphoneos/PrayerTime.app"; sourceTree = "<absolute>"; };
+		726A5E162EDB77A200B9FDFF /* PrayerTimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = PrayerTimeTests.xctest; path = "/Users/asma/Desktop/PrayerTime/build/Debug-iphoneos/PrayerTime.app/PlugIns/PrayerTimeTests.xctest"; sourceTree = "<absolute>"; };
+		726A5E202EDB77A200B9FDFF /* PrayerTimeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = PrayerTimeUITests.xctest; path = "/Users/asma/Desktop/PrayerTime/build/Debug-iphoneos/PrayerTimeUITests-Runner.app/PlugIns/PrayerTimeUITests.xctest"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		726A5E0B2EDB77A100B9FDFF /* PrayerTime */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = PrayerTime;
-			sourceTree = "<group>";
-		};
-		726A5E192EDB77A200B9FDFF /* PrayerTimeTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = PrayerTimeTests;
-			sourceTree = "<group>";
-		};
-		726A5E232EDB77A200B9FDFF /* PrayerTimeUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = PrayerTimeUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -76,20 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				726A5E0B2EDB77A100B9FDFF /* PrayerTime */,
-				726A5E192EDB77A200B9FDFF /* PrayerTimeTests */,
-				726A5E232EDB77A200B9FDFF /* PrayerTimeUITests */,
-				726A5E0A2EDB77A100B9FDFF /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		726A5E0A2EDB77A100B9FDFF /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				726A5E092EDB77A100B9FDFF /* PrayerTime.app */,
-				726A5E162EDB77A200B9FDFF /* PrayerTimeTests.xctest */,
-				726A5E202EDB77A200B9FDFF /* PrayerTimeUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,9 +107,6 @@
 			dependencies = (
 				726A5E182EDB77A200B9FDFF /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				726A5E192EDB77A200B9FDFF /* PrayerTimeTests */,
-			);
 			name = PrayerTimeTests;
 			packageProductDependencies = (
 			);
@@ -152,9 +126,6 @@
 			);
 			dependencies = (
 				726A5E222EDB77A200B9FDFF /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				726A5E232EDB77A200B9FDFF /* PrayerTimeUITests */,
 			);
 			name = PrayerTimeUITests;
 			packageProductDependencies = (
@@ -196,7 +167,7 @@
 			mainGroup = 726A5E002EDB77A100B9FDFF;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 726A5E0A2EDB77A100B9FDFF /* Products */;
+			productRefGroup = 726A5E002EDB77A100B9FDFF;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
