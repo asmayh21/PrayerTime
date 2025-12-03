@@ -18,16 +18,17 @@ struct PrayerTimesView: View {
         viewModel.prayers
     }
     
-  
-    
     var body: some View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                HStack {
-                    Button(action: {}) {
+                HStack(spacing: 12) {
+                    // زر الإعدادات (شكل فقط، بدون تنقل الآن)
+                    Button(action: {
+                        // أضف التنقل لاحقًا هنا
+                    }) {
                         Image(systemName: "gearshape.fill")
                             .font(.system(size: 24))
                             .foregroundColor(.white.opacity(0.9))
@@ -36,7 +37,7 @@ struct PrayerTimesView: View {
                             .clipShape(Circle())
                     }
                     
-                    Button(action: {}) {
+                    NavigationLink(destination: QiblaView()) {
                         Image(systemName: "location.fill")
                             .font(.system(size: 24))
                             .foregroundColor(.white.opacity(0.9))
@@ -75,7 +76,6 @@ struct PrayerTimesView: View {
                     }
                     .padding(.horizontal, 24)
                     
-//                    Text("الآن وقت صلاة \(selectedPrayer?.name ?? "...")")
                     Text("الآن وقت صلاة \(viewModel.currentPrayer?.name ?? "...")")
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(.white)
@@ -253,6 +253,8 @@ struct PrayerTimesView_Previews: PreviewProvider {
         ]
         vm.currentPrayer = vm.prayers.first
         
-        return PrayerTimesView(viewModel: vm)
+        return NavigationStack {
+            PrayerTimesView(viewModel: vm)
+        }
     }
 }

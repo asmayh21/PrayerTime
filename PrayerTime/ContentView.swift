@@ -4,7 +4,9 @@ struct ContentView: View {
     @StateObject var viewModel = PrayerViewModel()
     
     var body: some View {
-        PrayerTimesView(viewModel: viewModel)
+        NavigationStack {
+            PrayerTimesView(viewModel: viewModel)
+        }
     }
 }
 

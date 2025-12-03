@@ -12,11 +12,11 @@ class PrayerService {
             URLQueryItem(name: "city", value: city),
             URLQueryItem(name: "country", value: country),
             URLQueryItem(name: "method", value: "4"),
-            URLQueryItem(
-                name: "tune",
-                value: "0,2,0,1,1,1,1,1,0"
+//            URLQueryItem(
+//                name: "tune",
+//                value: "0,2,0,1,1,1,1,1,0"
               
-            )
+           
         ]
 
         guard let url = components.url else {
