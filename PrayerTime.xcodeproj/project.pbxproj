@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BF9BC4902EE164720044F6F3 /* PrayerTime-watchApp Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = BF9BC4862EE164710044F6F3 /* PrayerTime-watchApp Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		726A5E172EDB77A200B9FDFF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,18 +25,45 @@
 			remoteGlobalIDString = 726A5E082EDB77A100B9FDFF;
 			remoteInfo = PrayerTime;
 		};
+		BF9BC48E2EE164720044F6F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 726A5E012EDB77A100B9FDFF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BF9BC4852EE164710044F6F3;
+			remoteInfo = "PrayerTime-watchApp Watch App";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BF9BC4912EE164720044F6F3 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				BF9BC4902EE164720044F6F3 /* PrayerTime-watchApp Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		561F253A2EDD9184006F0859 /* PrayerTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrayerTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		561F253B2EDD9184006F0859 /* PrayerTimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrayerTimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		561F253C2EDD9184006F0859 /* PrayerTimeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrayerTimeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF9BC4862EE164710044F6F3 /* PrayerTime-watchApp Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PrayerTime-watchApp Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		726A5E0B2EDB77A100B9FDFF /* PrayerTime */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = PrayerTime;
+			sourceTree = "<group>";
+		};
+		BF9BC4872EE164710044F6F3 /* PrayerTime-watchApp Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "PrayerTime-watchApp Watch App";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -59,6 +90,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BF9BC4832EE164710044F6F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -69,6 +107,8 @@
 				561F253A2EDD9184006F0859 /* PrayerTime.app */,
 				561F253B2EDD9184006F0859 /* PrayerTimeTests.xctest */,
 				561F253C2EDD9184006F0859 /* PrayerTimeUITests.xctest */,
+				BF9BC4862EE164710044F6F3 /* PrayerTime-watchApp Watch App.app */,
+				BF9BC4872EE164710044F6F3 /* PrayerTime-watchApp Watch App */,
 			);
 			sourceTree = "<group>";
 		};
@@ -82,10 +122,12 @@
 				726A5E052EDB77A100B9FDFF /* Sources */,
 				726A5E062EDB77A100B9FDFF /* Frameworks */,
 				726A5E072EDB77A100B9FDFF /* Resources */,
+				BF9BC4912EE164720044F6F3 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				BF9BC48F2EE164720044F6F3 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				726A5E0B2EDB77A100B9FDFF /* PrayerTime */,
@@ -137,6 +179,28 @@
 			productReference = 561F253C2EDD9184006F0859 /* PrayerTimeUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		BF9BC4852EE164710044F6F3 /* PrayerTime-watchApp Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF9BC4942EE164720044F6F3 /* Build configuration list for PBXNativeTarget "PrayerTime-watchApp Watch App" */;
+			buildPhases = (
+				BF9BC4822EE164710044F6F3 /* Sources */,
+				BF9BC4832EE164710044F6F3 /* Frameworks */,
+				BF9BC4842EE164710044F6F3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				BF9BC4872EE164710044F6F3 /* PrayerTime-watchApp Watch App */,
+			);
+			name = "PrayerTime-watchApp Watch App";
+			packageProductDependencies = (
+			);
+			productName = "PrayerTime-watchApp Watch App";
+			productReference = BF9BC4862EE164710044F6F3 /* PrayerTime-watchApp Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -158,6 +222,9 @@
 						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = 726A5E082EDB77A100B9FDFF;
 					};
+					BF9BC4852EE164710044F6F3 = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
 				};
 			};
 			buildConfigurationList = 726A5E042EDB77A100B9FDFF /* Build configuration list for PBXProject "PrayerTime" */;
@@ -177,6 +244,7 @@
 				726A5E082EDB77A100B9FDFF /* PrayerTime */,
 				726A5E152EDB77A200B9FDFF /* PrayerTimeTests */,
 				726A5E1F2EDB77A200B9FDFF /* PrayerTimeUITests */,
+				BF9BC4852EE164710044F6F3 /* PrayerTime-watchApp Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -197,6 +265,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		726A5E1E2EDB77A200B9FDFF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF9BC4842EE164710044F6F3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -227,6 +302,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BF9BC4822EE164710044F6F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -239,6 +321,11 @@
 			isa = PBXTargetDependency;
 			target = 726A5E082EDB77A100B9FDFF /* PrayerTime */;
 			targetProxy = 726A5E212EDB77A200B9FDFF /* PBXContainerItemProxy */;
+		};
+		BF9BC48F2EE164720044F6F3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BF9BC4852EE164710044F6F3 /* PrayerTime-watchApp Watch App */;
+			targetProxy = BF9BC48E2EE164720044F6F3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -508,6 +595,72 @@
 			};
 			name = Release;
 		};
+		BF9BC4922EE164720044F6F3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5K53K4W47F;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "PrayerTime-watchApp";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = asma.PrayerTime;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = asma.PrayerTime.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		BF9BC4932EE164720044F6F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5K53K4W47F;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "PrayerTime-watchApp";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = asma.PrayerTime;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = asma.PrayerTime.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -543,6 +696,15 @@
 			buildConfigurations = (
 				726A5E312EDB77A200B9FDFF /* Debug */,
 				726A5E322EDB77A200B9FDFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF9BC4942EE164720044F6F3 /* Build configuration list for PBXNativeTarget "PrayerTime-watchApp Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF9BC4922EE164720044F6F3 /* Debug */,
+				BF9BC4932EE164720044F6F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
