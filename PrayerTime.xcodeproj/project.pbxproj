@@ -55,9 +55,29 @@
 		BF9BC4862EE164710044F6F3 /* PrayerTime-watchApp Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PrayerTime-watchApp Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BF9BC54B2EE4BAB40044F6F3 /* Exceptions for "PrayerTime" folder in "PrayerTime-watchApp Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MODEL/PrayerAPIModels.swift,
+				MODEL/PrayerTime.swift,
+				SERVICE/PrayerService.swift,
+				SERVICE/WatchConnectivityManager.swift.swift,
+				UTILITIES/celestialBody.swift,
+				UTILITIES/SharedBackground.swift,
+				ViewModel/PrayerViewModel.swift,
+				ViewModel/QiblaViewModel.swift,
+			);
+			target = BF9BC4852EE164710044F6F3 /* PrayerTime-watchApp Watch App */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		726A5E0B2EDB77A100B9FDFF /* PrayerTime */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BF9BC54B2EE4BAB40044F6F3 /* Exceptions for "PrayerTime" folder in "PrayerTime-watchApp Watch App" target */,
+			);
 			path = PrayerTime;
 			sourceTree = "<group>";
 		};
@@ -456,7 +476,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5K53K4W47F;
+				DEVELOPMENT_TEAM = N3B445JK83;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "السماح للموقع";
@@ -489,7 +509,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5K53K4W47F;
+				DEVELOPMENT_TEAM = N3B445JK83;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "السماح للموقع";
@@ -602,7 +622,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5K53K4W47F;
+				DEVELOPMENT_TEAM = N3B445JK83;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "PrayerTime-watchApp";
@@ -624,7 +644,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+				WATCHOS_DEPLOYMENT_TARGET = 11.6;
 			};
 			name = Debug;
 		};
@@ -635,7 +655,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5K53K4W47F;
+				DEVELOPMENT_TEAM = N3B445JK83;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "PrayerTime-watchApp";
@@ -657,7 +677,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+				WATCHOS_DEPLOYMENT_TARGET = 11.6;
 			};
 			name = Release;
 		};

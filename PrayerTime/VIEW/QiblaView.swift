@@ -4,14 +4,12 @@ struct QiblaView: View {
     @State private var currentGradient: [Color] = []
     @StateObject private var viewModel = QiblaViewModel()
     @Environment(\.dismiss) private var dismiss
-    
+    @State private var backgroundType: BackgroundType = {
+            return initialBackgroundType()
+        }()
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: currentGradient,
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            createBackgroundGradient(for: backgroundType)
             .ignoresSafeArea()
             
             VStack(spacing: 77) {
@@ -56,41 +54,11 @@ struct QiblaView: View {
                 Spacer(minLength: 100)
             }
         }
-        .onAppear {
-            updateGradient()
-        }
+    
     }
     
-    func updateGradient() {
-        let hour = Calendar.current.component(.hour, from: Date())
-        
-        switch hour {
-        case 0..<6:
-            currentGradient = [
-                Color(red: 0.05, green: 0.08, blue: 0.12),
-                Color(red: 0.08, green: 0.12, blue: 0.18),
-                Color(red: 0.10, green: 0.14, blue: 0.20)
-            ]
-        case 6..<11, 11..<17:
-            currentGradient = [
-                Color(red: 0x2D/255.0, green: 0x8C/255.0, blue: 0xFF/255.0),
-                Color(red: 0xD1/255.0, green: 0xE0/255.0, blue: 0xFF/255.0)
-            ]
-        case 17..<20:
-            currentGradient = [
-                Color(red: 0.65, green: 0.50, blue: 0.75),
-                Color(red: 0.85, green: 0.60, blue: 0.70),
-                Color(red: 0.95, green: 0.70, blue: 0.55),
-                Color(red: 0.85, green: 0.55, blue: 0.40)
-            ]
-        default:
-            currentGradient = [
-                Color(red: 0.05, green: 0.08, blue: 0.12),
-                Color(red: 0.08, green: 0.12, blue: 0.18),
-                Color(red: 0.10, green: 0.14, blue: 0.20)
-            ]
-        }
-    }
+
+    
 }
 
 private struct KabaOnCircle: View {

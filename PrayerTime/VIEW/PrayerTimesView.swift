@@ -1,18 +1,18 @@
 import SwiftUI
 
+import SwiftUI
+
+
+
 struct PrayerTimesView: View {
     @ObservedObject var viewModel: PrayerViewModel
     
     @State private var selectedPrayerID: UUID?
-    @State private var backgroundType: BackgroundType = .Isha
+    //check for current time to reflect the bg
+    @State private var backgroundType: BackgroundType = {
+            return initialBackgroundType()
+        }()
     
-    enum BackgroundType {
-        case Isha
-        case Dhuhr
-        case Maghrib
-        case fajr
-        case asr
-    }
     var highlightedPrayerID: UUID? {
         selectedPrayerID ?? viewModel.currentPrayer?.id
     }
@@ -22,15 +22,15 @@ struct PrayerTimesView: View {
     
     var body: some View {
         ZStack {
-            backgroundGradient
+            // FIXED: Use the single state variable for the gradient
+            createBackgroundGradient(for: backgroundType)
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
+                // ... (Toolbar/Header Content remains the same) ...
                 HStack(spacing: 12) {
-                    // زر الإعدادات (شكل فقط، بدون تنقل الآن)
-                    Button(action: {
-                        // أضيف التنقل لاحقًا هنا
-                    }) {
+                    // Settings Button
+                    Button(action: { /* Add Navigation Here */ }) {
                         Image(systemName: "gearshape.fill")
                             .font(.system(size: 24))
                             .foregroundColor(.white.opacity(0.9))
@@ -38,7 +38,7 @@ struct PrayerTimesView: View {
                             .background(Color.white.opacity(0.2))
                             .clipShape(Circle())
                     }
-                    
+                    // Qibla Navigation Link
                     NavigationLink(destination: QiblaView()) {
                         Image(systemName: "location.fill")
                             .font(.system(size: 24))
@@ -47,7 +47,6 @@ struct PrayerTimesView: View {
                             .background(Color.white.opacity(0.2))
                             .clipShape(Circle())
                     }
-                    
                     Spacer()
                 }
                 .padding(.horizontal, 24)
@@ -57,24 +56,18 @@ struct PrayerTimesView: View {
                 
                 if prayers.isEmpty {
                     VStack {
-                        ProgressView()
-                            .tint(.white)
-                            .scaleEffect(1.3)
-                            .padding(.bottom, 16)
-                        
-                        Text("جاري تحميل مواقيت الصلاة...")
-                            .foregroundColor(.white.opacity(0.9))
-                            .font(.system(size: 16, weight: .medium))
+                        ProgressView().tint(.white).scaleEffect(1.3).padding(.bottom, 16)
+                        Text("جاري تحميل مواقيت الصلاة...").foregroundColor(.white.opacity(0.9)).font(.system(size: 16, weight: .medium))
                     }
-                    
                     Spacer()
                 } else {
                     ZStack {
                         RoundedRectangle(cornerRadius: 30)
                             .fill(Color.white.opacity(0.15))
                             .frame(height: 200)
-                        
-                        celestialBody
+                            
+                        // FIXED: Use the single state variable to pass to the external view
+                        CelestialBodyView(backgroundType: backgroundType)
                     }
                     .padding(.horizontal, 24)
                     
@@ -94,6 +87,7 @@ struct PrayerTimesView: View {
                             .onTapGesture {
                                 withAnimation(.easeInOut(duration: 0.5)) {
                                     selectedPrayerID = prayer.id
+                                    // FIXED: Update the backgroundType state
                                     backgroundType = backgroundType(for: prayer)
                                 }
                             }
@@ -106,164 +100,31 @@ struct PrayerTimesView: View {
             }
         }
         .onAppear {
-            if let current = viewModel.currentPrayer ?? prayers.first {
-                selectedPrayerID = current.id
+            // FIXED: Ensure backgroundType is set based on the actual current prayer time
+            if let current = viewModel.currentPrayer {
                 backgroundType = backgroundType(for: current)
             }
+            
+            // Note: If PrayerViewModel updates the current prayer time on a timer,
+            // you should include logic here or in the ViewModel to force a state update
+            // when the prayer changes (e.g., using a published property in the ViewModel).
         }
     }
     
-    var backgroundGradient: LinearGradient {
-        switch backgroundType {
-        case .Isha:
-            return LinearGradient(
-                colors: [
-                    Color(red: 0.15, green: 0.15, blue: 0.25),
-                    Color(red: 0.1, green: 0.1, blue: 0.2)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        case .Dhuhr:
-            return LinearGradient(
-                colors: [
-                    Color(red: 0.4, green: 0.6, blue: 0.95),
-                    Color(red: 0.6, green: 0.75, blue: 0.95)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        case .Maghrib:
-            return LinearGradient(
-                colors: [
-                    Color(red: 0.65, green: 0.45, blue: 0.65),
-                    Color(red: 0.85, green: 0.6, blue: 0.5)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        case .fajr:
-            return LinearGradient(
-                colors: [
-                    Color(red: 0.15, green: 0.15, blue: 0.25),
-                    Color(red: 0.1, green: 0.1, blue: 0.2)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        case .asr:
-            return LinearGradient(
-                colors: [
-                    Color(red: 0.4, green: 0.6, blue: 0.95),
-                    Color(red: 0.6, green: 0.75, blue: 0.95)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        }
-    }
+
     
+    // Helper function remains to map prayer names to the shared enum
     func backgroundType(for prayer: PrayerTime) -> BackgroundType {
         switch prayer.name {
-        case "الفجر":
-            return .fajr
-        case "العشاء":
-            return .Isha
-        case "المغرب":
-            return .Maghrib
-        case "العصر":
-            return .asr
-        default:
-            return .Dhuhr
+        case "الفجر": return .fajr
+        case "العشاء": return .Isha
+        case "المغرب": return .Maghrib
+        case "العصر": return .asr
+        default: return .Dhuhr // Includes Dhuhr
         }
     }
     
-    @ViewBuilder
-    var celestialBody: some View {
-        if backgroundType == .Isha || backgroundType == .fajr {
-            ZStack {
-                Circle()
-                    .fill(Color.white.opacity(0.9))
-                    .frame(width: 120, height: 120)
-                    .shadow(color: .white.opacity(0.3), radius: 30)
-                
-                Circle()
-                    .fill(Color.gray.opacity(0.2))
-                    .frame(width: 25, height: 25)
-                    .offset(x: -15, y: -10)
-                
-                Circle()
-                    .fill(Color.gray.opacity(0.15))
-                    .frame(width: 30, height: 30)
-                    .offset(x: 20, y: 15)
-                
-                Circle()
-                    .fill(Color.gray.opacity(0.1))
-                    .frame(width: 20, height: 20)
-                    .offset(x: 10, y: -20)
-                
-                // غيوم الفجر
-                if backgroundType == .Isha {
-                    Capsule()
-                        .fill(Color.white.opacity(0.6))
-                        .frame(width: 60, height: 20)
-                        .offset(x: -70, y: 30)
-                    
-                    Capsule()
-                        .fill(Color.white.opacity(0.5))
-                        .frame(width: 50, height: 18)
-                        .offset(x: 75, y: 20)
-                }
-            }
-        } else {
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                Color.yellow.opacity(0.9),
-                                Color.orange.opacity(0.7)
-                            ],
-                            center: .center,
-                            startRadius: 20,
-                            endRadius: 80
-                        )
-                    )
-                    .frame(width: 130, height: 130)
-                    .shadow(color: .yellow.opacity(0.4), radius: 30)
-                
-                if backgroundType == .Dhuhr {
-                    Capsule()
-                        .fill(Color.white.opacity(0.6))
-                        .frame(width: 60, height: 20)
-                        .offset(x: -70, y: 30)
-                    
-                    Capsule()
-                        .fill(Color.white.opacity(0.5))
-                        .frame(width: 50, height: 18)
-                        .offset(x: 75, y: 20)
-                }
-                
-                // غيوم العصر
-                if backgroundType == .asr {
-                    Capsule()
-                        .fill(Color.white.opacity(0.6))
-                        .frame(width: 60, height: 20)
-                        .offset(x: -70, y: 30)
-                    
-                    Capsule()
-                        .fill(Color.white.opacity(0.5))
-                        .frame(width: 50, height: 18)
-                        .offset(x: 75, y: 20)
-                    
-                    Capsule()
-                        .fill(Color.white.opacity(0.55))
-                        .frame(width: 45, height: 17)
-                        .offset(x: 60, y: -45)
-                }
-            }
-        }
-    }
+    // REMOVED the redundant static initialBackgroundType() function
 }
 
 struct PrayerTimeRow: View {
@@ -296,20 +157,18 @@ struct PrayerTimeRow: View {
     }
 }
 
-struct PrayerTimesView_Previews: PreviewProvider {
-    static var previews: some View {
-        let vm = PrayerViewModel()
-        vm.prayers = [
-            PrayerTime(name: "الفجر",  time: "4:57 ص"),
-            PrayerTime(name: "الظهر",  time: "11:42 ص"),
-            PrayerTime(name: "العصر",  time: "2:43 م"),
-            PrayerTime(name: "المغرب", time: "5:04 م"),
-            PrayerTime(name: "العشاء", time: "6:34 م")
-        ]
-        vm.currentPrayer = vm.prayers.first
-        
-        return NavigationStack {
-            PrayerTimesView(viewModel: vm)
+struct ContentView2: View {
+    @StateObject var viewModel = PrayerViewModel()
+    
+    var body: some View {
+        NavigationStack {
+            PrayerTimesView(viewModel: viewModel)
         }
+    }
+}
+
+struct ContentView2_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView2()
     }
 }

@@ -15,3 +15,20 @@ struct PrayerTime_watchApp_Watch_AppApp: App {
         }
     }
 }
+
+
+struct ContentView: View {
+    @StateObject var viewModel = PrayerViewModel()
+    
+    var body: some View {
+        NavigationStack {
+            PrayerTimesView_WatchOS(viewModel: viewModel)
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
