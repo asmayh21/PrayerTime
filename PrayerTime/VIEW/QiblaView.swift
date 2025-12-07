@@ -12,29 +12,29 @@ struct QiblaView: View {
             createBackgroundGradient(for: backgroundType)
             .ignoresSafeArea()
             
-            VStack(spacing: 77) {
+            VStack(spacing: 66){
+                Spacer()
+                
+                
+
+                
+                
+         //       Spacer()
                 HStack {
                     Text("القبلة")
                         .font(.title2)
                         .fontWeight(.medium)
                         .foregroundColor(.white)
-                        .padding(.top,-10)
                     
-                    Spacer()
                     
-                    Color.clear
-                        .frame(width: 44)
-                        .padding(.trailing, -20)
+                  
                 }
-                .padding(.top, 60)
-                
                 Spacer()
-                
                 ZStack {
                     Circle()
                         .fill(Color.white.opacity(0.12))
                         .frame(width: 350, height: 350)
-                        .padding(.top,-88)
+                      //  .padding(.top,-88)
 
                     // سهم البوصلة يدور مع زاوية القبلة
                     Image(systemName: "location.north.fill")
@@ -49,7 +49,7 @@ struct QiblaView: View {
                     // الكعبة تتحرك على محيط الدائرة حسب زاوية القبلة
                     KabaOnCircle(angle: viewModel.qiblaAngle)
                         .animation(.easeInOut(duration: 0.2), value: viewModel.qiblaAngle)
-                }
+               }
                 
                 Spacer(minLength: 100)
             }
