@@ -100,6 +100,7 @@ struct PrayerTimesView: View {
             }
         }
         .onAppear {
+           
             // FIXED: Ensure backgroundType is set based on the actual current prayer time
             if let current = viewModel.currentPrayer {
                 backgroundType = backgroundType(for: current)

@@ -61,6 +61,7 @@
 			membershipExceptions = (
 				MODEL/PrayerAPIModels.swift,
 				MODEL/PrayerTime.swift,
+				SERVICE/NotificationManager.swift,
 				SERVICE/PrayerService.swift,
 				SERVICE/WatchConnectivityManager.swift.swift,
 				UTILITIES/celestialBody.swift,
