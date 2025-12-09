@@ -40,7 +40,7 @@ struct PrayerTimesView: View {
                     }
                     // Qibla Navigation Link
                     NavigationLink(destination: QiblaView()) {
-                        Image(systemName: "location.fill")
+                        Image(systemName: "safari")
                             .font(.system(size: 24))
                             .foregroundColor(.white.opacity(0.9))
                             .frame(width: 50, height: 50)
