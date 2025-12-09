@@ -4,6 +4,7 @@ import Combine
 class PrayerViewModel: ObservableObject {
     @Published var prayers: [PrayerTime] = []
     @Published var currentPrayer: PrayerTime?
+    @Published var backgroundType: BackgroundType = initialBackgroundType()
 
     private let service = PrayerService()
     private var timer: Timer?
@@ -194,5 +195,19 @@ class PrayerViewModel: ObservableObject {
         } else {
             currentPrayer = mapped.sorted(by: { $0.1 < $1.1 }).first?.0
         }
+        
+        // Update background type based on current prayer name
+        if let name = currentPrayer?.name {
+            switch name {
+            case "الفجر": backgroundType = .fajr
+            case "العشاء": backgroundType = .Isha
+            case "المغرب": backgroundType = .Maghrib
+            case "العصر": backgroundType = .asr
+            default: backgroundType = .Dhuhr
+            }
+        } else {
+            backgroundType = initialBackgroundType()
+        }
     }
 }
+
