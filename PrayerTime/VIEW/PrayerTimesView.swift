@@ -30,8 +30,16 @@ struct PrayerTimesView: View {
                 // ... (Toolbar/Header Content remains the same) ...
                 HStack(spacing: 12) {
                     // Settings Button
-                    Button(action: { /* Add Navigation Here */ }) {
-                        Image(systemName: "gearshape.fill")
+//                    Button(action: { /* Add Navigation Here */ }) {
+//                        Image(systemName: "gearshape.fill")
+//                            .font(.system(size: 24))
+//                            .foregroundColor(.white.opacity(0.9))
+//                            .frame(width: 50, height: 50)
+//                            .background(Color.white.opacity(0.2))
+//                            .clipShape(Circle())
+//                    }
+                    NavigationLink(destination: setting()) {
+                        Image(systemName: "gearshape")
                             .font(.system(size: 24))
                             .foregroundColor(.white.opacity(0.9))
                             .frame(width: 50, height: 50)

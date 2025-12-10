@@ -4,7 +4,7 @@ import Combine
 class PrayerViewModel: ObservableObject {
     @Published var prayers: [PrayerTime] = []
     @Published var currentPrayer: PrayerTime?
-    @Published var backgroundType: BackgroundType = initialBackgroundType()
+//    @Published var backgroundType: BackgroundType = initialBackgroundType()
 
     private let service = PrayerService()
     private var timer: Timer?
@@ -15,9 +15,9 @@ class PrayerViewModel: ObservableObject {
     init() {
         NotificationManager.requestNotificationPermission()
         
-        // ⚠️ TEMPORARY CHANGE FOR TESTING:
-         load() // <-- COMMENT THIS OUT
-//        self.loadTestPrayers() // <-- USE THIS TO TEST NOTIFICATIONS
+        // ⚠️ REMEMBER TO SWITCH WHICH FUNCTION IS CALLED FOR TESTING VS LIVE API
+         load()
+//        self.loadTestPrayers()
         
         timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
             self?.updateCurrentPrayer()
@@ -29,18 +29,18 @@ class PrayerViewModel: ObservableObject {
     }
 
     // ----------------------------------------------------
-    // MARK: - API Loading (Original Function)
+    // MARK: - API Loading (FIXED)
     // ----------------------------------------------------
 
     func load(city: String = "Riyadh", country: String = "SA") {
         service.fetchTodayPrayers(city: city, country: country) { [weak self] result in
-            // ... (rest of the original load logic remains the same) ...
             guard let self else { return }
 
             DispatchQueue.main.async {
                 switch result {
                 case .success(let prayersFromAPI):
                     let formattedPrayers = prayersFromAPI.map { prayer in
+                        // Use the now-English-only formatTo12Hour to standardize the API's raw time
                         PrayerTime(
                             name: prayer.name,
                             time: self.formatTo12Hour(prayer.time)
@@ -49,6 +49,13 @@ class PrayerViewModel: ObservableObject {
                     self.prayers = formattedPrayers
                     self.updateCurrentPrayer()
                     self.scheduleAllDailyNotifications()
+                    
+                    // ✅ PRINT STATEMENT FOR DATA CHECK
+                    print("✅ LOAD (API) Data Format Check:")
+                    self.prayers.forEach { p in
+                        print("    \(p.name): \(p.time) (Internal format)")
+                    }
+                    
                 case .failure(let error):
                     print("Error fetching prayers: \(error)")
                 }
@@ -57,7 +64,7 @@ class PrayerViewModel: ObservableObject {
     }
 
     // ----------------------------------------------------
-    // ⭐️ MARK: - TESTING FUNCTION
+    // ⭐️ MARK: - TESTING FUNCTION (MODIFIED)
     // ----------------------------------------------------
 
     func loadTestPrayers() {
@@ -74,13 +81,19 @@ class PrayerViewModel: ObservableObject {
         // 2. Create the future Date objects and format the resulting array
         var testDataMap: [String: Date] = [:]
         
+        // Use en_US_POSIX for a universal, predictable English format
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "h:mm a" // e.g., "9:00 AM"
+        formatter.timeZone = TimeZone.current
+
         let testPrayers: [PrayerTime] = hardcodedTimes.map { (name, minutes) in
             let futureDate = now.addingTimeInterval(minutes * 60)
             
-            // Format the time string as if it came from the API/formatTo12Hour
-            let timeString = self.formatTo12Hour(futureDate.description)
+            // The timeString is now guaranteed to be the English format (e.g., "12:03 PM")
+            let timeString = formatter.string(from: futureDate)
             
-            // Store the actual future Date using the formatted time string as the key
+            // Store the actual future Date using the English time string as the key
             testDataMap[timeString] = futureDate
             
             return PrayerTime(name: name, time: timeString)
@@ -94,8 +107,11 @@ class PrayerViewModel: ObservableObject {
         // 4. Call the original scheduling function
         self.scheduleAllDailyNotifications()
         
-        // OPTIONAL: Check scheduled notifications in the console
-//        NotificationManager.checkPendingNotifications()
+        // ✅ PRINT STATEMENT FOR DATA CHECK
+        print("✅ TEST LOAD Data Format Check:")
+        self.prayers.forEach { p in
+            print("    \(p.name): \(p.time) (Internal format)")
+        }
     }
 
     // ----------------------------------------------------
@@ -103,31 +119,29 @@ class PrayerViewModel: ObservableObject {
     // ----------------------------------------------------
 
     private func scheduleAllDailyNotifications() {
-        // Pass the prayer data and the (now modified) time conversion function to the Manager
         NotificationManager.scheduleAllDailyNotifications(
             prayers: self.prayers,
-            timeConverter: self.dateForToday // The function signature remains the same
+            timeConverter: self.dateForToday
         )
     }
 
+    // ⭐️ MODIFIED: Now consistently returns the standard English format (e.g., "3:30 PM")
     private func formatTo12Hour(_ timeString: String) -> String {
         guard let date = dateForToday(from: timeString) else {
             return timeString
         }
 
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ar_SA")
+        // Use a standard English locale for consistent "h:mm a" output
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "h:mm a"
+        formatter.timeZone = TimeZone.current
 
-        var formatted = formatter.string(from: date)
-        formatted = formatted
-            .replacingOccurrences(of: "AM", with: "ص")
-            .replacingOccurrences(of: "PM", with: "م")
-
-        return formatted
+        // Removed all manual Arabic character replacements.
+        return formatter.string(from: date)
     }
 
-    // ⭐️ MODIFIED: dateForToday now checks the test data map first
+    // ⭐️ MODIFIED: Prioritizes parsing the standardized English time format
     private func dateForToday(from timeString: String) -> Date? {
         
         // 1. If we have test data, use the precise Date from the map
@@ -135,15 +149,30 @@ class PrayerViewModel: ObservableObject {
             return testDate
         }
         
-        // 2. If not testing (i.e., data came from API), proceed with complex parsing
-        // ... (original parsing logic for API strings) ...
+        // 2. NEW LOGIC: Try to parse the standardized English 12-hour format "h:mm a"
+        // This handles the data coming from the 'load' function.
+        let standardTimeFormatter = DateFormatter()
+        standardTimeFormatter.locale = Locale(identifier: "en_US_POSIX")
+        standardTimeFormatter.dateFormat = "h:mm a"
+        standardTimeFormatter.timeZone = TimeZone.current
 
-        let trimmed = timeString.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        // ... (rest of the original complex parsing logic remains unchanged) ...
+        if let dateFromStandardTime = standardTimeFormatter.date(from: timeString) {
+            // Adjust the date to today's date at that time
+            let calendar = Calendar.current
+            var components = calendar.dateComponents([.hour, .minute], from: dateFromStandardTime)
+            
+            let todayComponents = calendar.dateComponents([.year, .month, .day], from: Date())
+            components.year = todayComponents.year
+            components.month = todayComponents.month
+            components.day = todayComponents.day
+            
+            return calendar.date(from: components)
+        }
         
-        // NOTE: Ensure your existing parsing logic correctly handles the Date.description format if needed
-        // For the test, the initial if-block will typically handle the data.
+        // 3. Fallback to original complex parsing logic for the raw API string format
+        // (if the API returns something unexpected, like "15:30:00" without AM/PM)
+        
+        let trimmed = timeString.trimmingCharacters(in: .whitespacesAndNewlines)
         
         let noTZ: String
         if let parenRange = trimmed.range(of: "(") {
@@ -157,6 +186,8 @@ class PrayerViewModel: ObservableObject {
         let marker = components.count > 1 ? String(components[1]) : nil
         
         let hm = timePart.split(separator: ":")
+        // WARNING: This conversion to Int() will fail if the raw API string contains Arabic-Indic numerals.
+        // However, if the API returns standard 24-hour time (e.g., "15:30"), this works.
         guard hm.count >= 2,
               let rawHour = Int(hm[0]),
               let minute = Int(hm[1]) else { return nil }
@@ -165,6 +196,7 @@ class PrayerViewModel: ObservableObject {
         
         if let marker = marker {
             let lower = marker.lowercased()
+            // This is old logic for AM/PM/ص/م parsing, kept as a final safety fallback.
             if lower.contains("am") || lower.contains("ص") {
                 if hour == 12 { hour = 0 }
             } else if lower.contains("pm") || lower.contains("م") {
@@ -195,19 +227,5 @@ class PrayerViewModel: ObservableObject {
         } else {
             currentPrayer = mapped.sorted(by: { $0.1 < $1.1 }).first?.0
         }
-        
-        // Update background type based on current prayer name
-        if let name = currentPrayer?.name {
-            switch name {
-            case "الفجر": backgroundType = .fajr
-            case "العشاء": backgroundType = .Isha
-            case "المغرب": backgroundType = .Maghrib
-            case "العصر": backgroundType = .asr
-            default: backgroundType = .Dhuhr
-            }
-        } else {
-            backgroundType = initialBackgroundType()
-        }
     }
 }
-

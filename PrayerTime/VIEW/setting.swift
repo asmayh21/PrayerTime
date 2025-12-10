@@ -8,6 +8,7 @@
 // SettingView.swift
 
 import SwiftUI
+import Combine
 
 struct setting: View {
     
@@ -19,14 +20,17 @@ struct setting: View {
     
     // 3. تعريف الثوابت المساعدة للألوان (للعناصر الداخلية)
  //   let darkBackground = Color(red: 0.1, green: 0.1, blue: 0.2)
+    @State private var backgroundType: BackgroundType = {
+            return initialBackgroundType()
+        }()
     
     var body: some View {
         
         // استخدام حاوية رئيسية لتطبيق الخلفية الديناميكية حسب الصلاة
         ZStack {
             // نفس خلفية صفحة الصلوات باستخدام BackgroundType
-            createBackgroundGradient(for: prayerViewModel.backgroundType)
-                .ignoresSafeArea(.all)
+            createBackgroundGradient(for: backgroundType)
+                .ignoresSafeArea()
             
             VStack(alignment: .leading, spacing: 30) { // تم تغيير المحاذاة إلى .leading
                 
@@ -74,11 +78,12 @@ struct setting: View {
                     
                     Picker("Vibration Level", selection: $viewModel.selectedVibration) {
                         ForEach(viewModel.availableVibrationLevels) { level in
-                            Text(level.rawValue).tag(level)
+                            Text(level.rawValue).tag(level).foregroundColor(.white)
                         }
                     }
-                    .pickerStyle(.segmented)
-                    .frame(width: 355 , height: 60)
+                    .pickerStyle(.inline)
+                    .frame(width: 355 , height: 120)
+                    
                 }
                 .padding(.horizontal)
                 
