@@ -55,9 +55,12 @@ struct setting: View {
                     }
                     .pickerStyle(.menu)
                     .frame(width: 345 , height: 54)
+                    .tint(.white)
                     .padding(.horizontal, 10)
-                    .background(Color.white .opacity(0.2))
+                    .background(Color.white .opacity(0.1))
                     .cornerRadius(10)
+                   // .multilineTextAlignment(.leading) // 1. محاذاة النص داخل الصندوق لليسار
+                    //.padding(.leading, 15)
                     .foregroundColor(.white)
                     .onChange(of: viewModel.selectedLanguage) { _ in
                         viewModel.languageDidChange()
