@@ -61,7 +61,6 @@
 			membershipExceptions = (
 				MODEL/PrayerAPIModels.swift,
 				MODEL/PrayerTime.swift,
-				MODEL/Settings1.swift,
 				SERVICE/NotificationManager.swift,
 				SERVICE/PrayerService.swift,
 				SERVICE/WatchConnectivityManager.swift.swift,
@@ -69,7 +68,6 @@
 				UTILITIES/SharedBackground.swift,
 				ViewModel/PrayerViewModel.swift,
 				ViewModel/QiblaViewModel.swift,
-				ViewModel/SettingViewModel.swift,
 			);
 			target = BF9BC4852EE164710044F6F3 /* PrayerTime-watchApp Watch App */;
 		};
