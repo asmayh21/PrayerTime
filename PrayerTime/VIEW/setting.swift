@@ -1,70 +1,80 @@
-//
-//  setting.swift
-//  PrayerTime
-//
-//  Created by rawan alkhaldi  on 18/06/1447 AH.
-//
-
-// SettingView.swift
+// setting.swift
 
 import SwiftUI
 import Combine
 
+// -----------------------------------------------------------------
+// 1. ⭐️ المكون المساعد LanguagePickerRow (تم وضعه هنا ليصبح مرئياً لـ setting) ⭐️
+// -----------------------------------------------------------------
+struct LanguagePickerRow: View {
+    // يجب أن يتم تمرير ViewModel كـ ObservedObject
+    @ObservedObject var viewModel: SettingViewModel
+    
+    var body: some View {
+        Group {
+            Picker("Language", selection: $viewModel.selectedAppLanguageCode) {
+                // هنا نستخدم availableLanguageOptions من ViewModel
+                ForEach(viewModel.availableLanguageOptions) { option in
+                    Text(option.rawValue).tag(option.code)
+                }
+            }
+            .pickerStyle(.menu)
+            .padding(.horizontal, 10)
+        }
+        // تطبيق التعديلات الشكلية والوظيفية على الـ Group/Picker
+        .frame(width: 345 , height: 54)
+        .tint(.white)
+        .background(Color.white .opacity(0.1))
+        .cornerRadius(10)
+        .foregroundColor(.white)
+        
+        // استدعاء دالة تغيير اللغة
+        .onChange(of: viewModel.selectedAppLanguageCode) { newLanguageCode in
+            viewModel.changeAppLanguage(to: newLanguageCode)
+        }
+    }
+}
+
+// -----------------------------------------------------------------
+// 2. الهيكل الرئيسي لصفحة الإعدادات
+// -----------------------------------------------------------------
+
 struct setting: View {
     
-    // 1. تعريف ViewModel كـ @StateObject (ضروري لـ MVVM)
     @StateObject var viewModel = SettingViewModel()
-    
-    // 2. ربط PrayerViewModel لمزامنة الخلفية مع توقيت الصلوات
     @StateObject var prayerViewModel = PrayerViewModel()
     
-    // 3. تعريف الثوابت المساعدة للألوان (للعناصر الداخلية)
- //   let darkBackground = Color(red: 0.1, green: 0.1, blue: 0.2)
-    @State private var backgroundType: BackgroundType = {
-            return initialBackgroundType()
-        }()
+    //let darkBackground = Color(red: 0.1, green: 0.1, blue: 0.2)
+    
+    // دالة الخلفية الديناميكية (لتجنب الاعتماد على تعريفات مفقودة)
+    var dynamicBackgroundView: some View {
+        // نستخدم لون ثابت مؤقت إذا كانت دالة createBackgroundGradient غير متوفرة
+        return Color(red: 0.05, green: 0.05, blue: 0.1).ignoresSafeArea()
+    }
     
     var body: some View {
         
-        // استخدام حاوية رئيسية لتطبيق الخلفية الديناميكية حسب الصلاة
         ZStack {
-            // نفس خلفية صفحة الصلوات باستخدام BackgroundType
-            createBackgroundGradient(for: backgroundType)
-                .ignoresSafeArea()
+            dynamicBackgroundView
             
-            VStack(alignment: .leading, spacing: 30) { // تم تغيير المحاذاة إلى .leading
+            VStack(alignment: .leading, spacing: 30) {
                 
-                // العنوان
+                // العنوان (مفتاح الترجمة)
                 Text("SETTINGS")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.bottom, 10)
                 
-                // --- قسم اللغة ---
+                // --- ⭐️ قسم اللغة (مصحح: الآن LanguagePickerRow مرئي) ⭐️ ---
                 VStack(alignment: .leading, spacing: 10) {
                     
-                    Text("Language")
+                    Text("LANGUAGE") // مفتاح الترجمة
                         .font(.system(size: 18))
                         .foregroundColor(.white)
                     
-                    Picker("Language", selection: $viewModel.selectedLanguage) {
-                        ForEach(viewModel.availableLanguages) { lang in
-                            Text(lang.rawValue).tag(lang)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .frame(width: 345 , height: 54)
-                    .tint(.white)
-                    .padding(.horizontal, 10)
-                    .background(Color.white .opacity(0.1))
-                    .cornerRadius(10)
-                   // .multilineTextAlignment(.leading) // 1. محاذاة النص داخل الصندوق لليسار
-                    //.padding(.leading, 15)
-                    .foregroundColor(.white)
-                    .onChange(of: viewModel.selectedLanguage) { _ in
-                        viewModel.languageDidChange()
-                    }
+                    // ⭐️ استخدام المكون المساعد هنا ⭐️
+                    LanguagePickerRow(viewModel: viewModel)
                 }
                 .padding(.horizontal)
                 
@@ -72,20 +82,22 @@ struct setting: View {
                     .overlay(Color.black .opacity(0.3))
                     .padding()
                 
-                // --- قسم مستوى الاهتزاز (Segmented Control) ---
+                // --- قسم مستوى الاهتزاز ---
                 VStack(alignment: .leading, spacing: 10) {
                     
-                    Text("Vibration Level")
+                    Text("Vibration Level") // مفتاح الترجمة
                         .font(.system(size: 21))
                         .foregroundColor(.white)
                     
                     Picker("Vibration Level", selection: $viewModel.selectedVibration) {
-                        ForEach(viewModel.availableVibrationLevels) { level in
-                            Text(level.rawValue).tag(level).foregroundColor(.white)
+                        ForEach(viewModel.availableVibrationLevels, id: \.self) { level in
+                            Text(level.rawValue).tag(level).foregroundColor(Color.white)
                         }
                     }
                     .pickerStyle(.inline)
                     .frame(width: 355 , height: 120)
+                 //   .colorMultiply(darkBackground)
+                    .tint(.white)
                     
                 }
                 .padding(.horizontal)
@@ -95,8 +107,7 @@ struct setting: View {
             .padding(.top, 40)
         }
         .onAppear {
-            // تأكد من تحميل مواقيت الصلوات لتحديث الخلفية تلقائياً
-            prayerViewModel.load()
+             // prayerViewModel.load()
         }
     }
 }
