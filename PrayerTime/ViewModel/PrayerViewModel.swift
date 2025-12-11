@@ -143,72 +143,81 @@ class PrayerViewModel: ObservableObject {
 
     // ⭐️ MODIFIED: Prioritizes parsing the standardized English time format
     private func dateForToday(from timeString: String) -> Date? {
-        
-        // 1. If we have test data, use the precise Date from the map
+        // 1) If testing map has exact Date, return it
         if let testDate = self.testPrayerTimes[timeString] {
             return testDate
         }
-        
-        // 2. NEW LOGIC: Try to parse the standardized English 12-hour format "h:mm a"
-        // This handles the data coming from the 'load' function.
-        let standardTimeFormatter = DateFormatter()
-        standardTimeFormatter.locale = Locale(identifier: "en_US_POSIX")
-        standardTimeFormatter.dateFormat = "h:mm a"
-        standardTimeFormatter.timeZone = TimeZone.current
 
-        if let dateFromStandardTime = standardTimeFormatter.date(from: timeString) {
-            // Adjust the date to today's date at that time
-            let calendar = Calendar.current
-            var components = calendar.dateComponents([.hour, .minute], from: dateFromStandardTime)
-            
-            let todayComponents = calendar.dateComponents([.year, .month, .day], from: Date())
-            components.year = todayComponents.year
-            components.month = todayComponents.month
-            components.day = todayComponents.day
-            
-            return calendar.date(from: components)
+        let calendar = Calendar.current
+        let today = Date()
+        let todayYMD = calendar.dateComponents([.year, .month, .day], from: today)
+
+        // Helper to build Date with today's Y/M/D and parsed H/M
+        func buildTodayDate(from date: Date) -> Date? {
+            var hm = calendar.dateComponents([.hour, .minute], from: date)
+            var comps = todayYMD
+            comps.hour = hm.hour
+            comps.minute = hm.minute
+            return calendar.date(from: comps)
         }
-        
-        // 3. Fallback to original complex parsing logic for the raw API string format
-        // (if the API returns something unexpected, like "15:30:00" without AM/PM)
-        
-        let trimmed = timeString.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        let noTZ: String
-        if let parenRange = trimmed.range(of: "(") {
-            noTZ = String(trimmed[..<parenRange.lowerBound]).trimmingCharacters(in: .whitespaces)
-        } else {
-            noTZ = trimmed
-        }
-        
-        let components = noTZ.split(separator: " ")
-        guard let timePart = components.first else { return nil }
-        let marker = components.count > 1 ? String(components[1]) : nil
-        
-        let hm = timePart.split(separator: ":")
-        // WARNING: This conversion to Int() will fail if the raw API string contains Arabic-Indic numerals.
-        // However, if the API returns standard 24-hour time (e.g., "15:30"), this works.
-        guard hm.count >= 2,
-              let rawHour = Int(hm[0]),
-              let minute = Int(hm[1]) else { return nil }
-        
-        var hour = rawHour
-        
-        if let marker = marker {
-            let lower = marker.lowercased()
-            // This is old logic for AM/PM/ص/م parsing, kept as a final safety fallback.
-            if lower.contains("am") || lower.contains("ص") {
-                if hour == 12 { hour = 0 }
-            } else if lower.contains("pm") || lower.contains("م") {
-                if hour < 12 { hour += 12 }
+
+        // Try "h:mm a" first (for already formatted or test times)
+        do {
+            let fmt = DateFormatter()
+            fmt.locale = Locale(identifier: "en_US_POSIX")
+            fmt.timeZone = TimeZone.current
+            fmt.dateFormat = "h:mm a"
+            if let d = fmt.date(from: timeString) {
+                return buildTodayDate(from: d)
             }
         }
-        
-        var comps = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+
+        // Remove any trailing timezone in parentheses, e.g. "05:12 (AST)"
+        let trimmed = timeString.trimmingCharacters(in: .whitespacesAndNewlines)
+        let withoutTZ: String = {
+            if let r = trimmed.range(of: "(") {
+                return String(trimmed[..<r.lowerBound]).trimmingCharacters(in: .whitespaces)
+            } else {
+                return trimmed
+            }
+        }()
+
+        // Try "HH:mm"
+        do {
+            let fmt = DateFormatter()
+            fmt.locale = Locale(identifier: "en_US_POSIX")
+            fmt.timeZone = TimeZone.current
+            fmt.dateFormat = "HH:mm"
+            if let d = fmt.date(from: withoutTZ) {
+                return buildTodayDate(from: d)
+            }
+        }
+
+        // Try "HH:mm:ss"
+        do {
+            let fmt = DateFormatter()
+            fmt.locale = Locale(identifier: "en_US_POSIX")
+            fmt.timeZone = TimeZone.current
+            fmt.dateFormat = "HH:mm:ss"
+            if let d = fmt.date(from: withoutTZ) {
+                return buildTodayDate(from: d)
+            }
+        }
+
+        // Final fallback: manual parsing (Western digits)
+        let parts = withoutTZ.split(separator: ":")
+        guard parts.count >= 2,
+              let hour = Int(parts[0]),
+              let minute = Int(parts[1]) else {
+            // Debug log if needed:
+            // print("❌ Failed to parse time: \(timeString)")
+            return nil
+        }
+
+        var comps = todayYMD
         comps.hour = hour
         comps.minute = minute
-        
-        return Calendar.current.date(from: comps)
+        return calendar.date(from: comps)
     }
 
     func updateCurrentPrayer() {
@@ -229,3 +238,4 @@ class PrayerViewModel: ObservableObject {
         }
     }
 }
+
