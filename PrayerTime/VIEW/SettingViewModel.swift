@@ -38,7 +38,12 @@ class SettingViewModel: ObservableObject {
     @AppStorage("appLanguageCode") var selectedAppLanguageCode: String = "ar"
     
     // 2. خصائص الإعدادات الأخرى (باستخدام Enum الجديدة)
-    @Published var selectedVibration: VibrationOption = .midum
+    @Published var selectedVibration: VibrationOption = .midum {
+        didSet {
+            // حفظ اختيار الاهتزاز ليتاح قراءته من أي مكان
+            UserDefaults.standard.set(selectedVibration.rawValue, forKey: "vibrationOption")
+        }
+    }
     
     // 3. البيانات المتاحة
     let availableLanguageOptions = LanguageOption.allCases
@@ -49,6 +54,14 @@ class SettingViewModel: ObservableObject {
         if let currentLanguageArray = UserDefaults.standard.stringArray(forKey: "AppleLanguages"),
            let currentLanguageCode = currentLanguageArray.first {
             self.selectedAppLanguageCode = currentLanguageCode.prefix(2).lowercased()
+        }
+        // تحميل قيمة الاهتزاز المحفوظة إن وجدت
+        if let saved = UserDefaults.standard.string(forKey: "vibrationOption"),
+           let opt = VibrationOption(rawValue: saved) {
+            self.selectedVibration = opt
+        } else {
+            // حفظ القيمة الافتراضية لأول مرة
+            UserDefaults.standard.set(selectedVibration.rawValue, forKey: "vibrationOption")
         }
     }
     

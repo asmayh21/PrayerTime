@@ -7,9 +7,17 @@
 
 import SwiftUI
 import WatchConnectivity
+import UserNotifications
+import UIKit
 
 @main
 struct PrayerTimeApp: App {
+    
+    // تعيين delegate عند الإطلاق
+    init() {
+        UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -17,7 +25,20 @@ struct PrayerTimeApp: App {
     }
 }
 
-
+// Delegate منفصل لإدارة عرض الإشعارات عندما يكون التطبيق نشط
+final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
+    static let shared = NotificationDelegate()
+    
+    // يتم استدعاؤها عندما يصل إشعار والتطبيق في الواجهة
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // تشغيل هابتك وفق إعداد المستخدم
+        HapticManager.instance.impactFromUserSetting()
+        // عرض الإشعار كـ banner مع صوت وشارة
+        completionHandler([.banner, .sound, .badge])
+    }
+}
 
 struct ContentView: View {
     @StateObject var viewModel = PrayerViewModel()
@@ -34,67 +55,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
-//
-//struct ContentView: View {
-//    @ObservedObject var viewModel = WatchConnectivityManager.shared
-//    @State private var isReachable = "NO"
-//    
-//    var body: some View {
-//        NavigationView {
-//            VStack {
-//                HStack {
-//                    Button(action: {
-//                    //checks if the session is reachable
-//
-//                        self.isReachable = self.viewModel.session.isReachable ? "YES": "NO"
-//                    }) {
-//                        Text("Check")
-//                    }
-//                    .padding(.leading, 16.0)
-//                    Spacer()
-//                    Text("isReachable")
-//                        .font(.headline)
-//                        .padding()
-//                    Text(self.isReachable)
-//                        .foregroundColor(.gray)
-//                        .font(.subheadline)
-//                        .padding()
-//                }
-//                .background(Color.init(.systemGray5))
-//                List {
-//
-//            ForEach(self.viewModel.messagesData, id: \.self) { animal in
-//                        MessageRow(animalModel: animal)
-//                    }
-//                }
-//                .listStyle(PlainListStyle())
-//                Spacer()
-//            }
-//            .navigationTitle("Receiver")
-//        }
-//    }
-//}
-//
-//#Preview {
-//    ContentView()
-//}
-//
-//struct MessageRow: View {
-//    let animalModel: AnimalModel
-//    
-//    var body: some View {
-//        VStack(alignment: .leading) {
-//            Text(animalModel.name)
-//                .font(.body)
-//                .padding(.vertical, 4.0)
-//            Text("Date()")
-//                .font(.footnote)
-//                .foregroundColor(.gray)
-//        }
-//    }
-//}
-//
-//#Preview {
-//    MessageRow(animalModel: AnimalModel(name: "🐱Cat"))
-//}

@@ -1,6 +1,39 @@
 import UserNotifications
 import Foundation
 
+import UIKit
+
+class HapticManager {
+    static let instance = HapticManager()
+    
+    func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(type)
+    }
+    
+    func impact(style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.impactOccurred()
+    }
+    
+    // قراءة نمط الاهتزاز من إعدادات المستخدم وتحويله إلى FeedbackStyle
+    func impactFromUserSetting() {
+        let saved = UserDefaults.standard.string(forKey: "vibrationOption")
+        let style: UIImpactFeedbackGenerator.FeedbackStyle
+        switch saved {
+        case "Low":
+            style = .light
+        case "Midum":
+            style = .medium
+        case "Heavy":
+            fallthrough
+        default:
+            style = .heavy
+        }
+        impact(style: style)
+    }
+}
+
 class NotificationManager {
     
     // 1. Request Permission
@@ -44,7 +77,8 @@ class NotificationManager {
         content.title = "حان وقت الصلاة"
         content.body = "حان الآن وقت صلاة \(prayer.name)."
         
-        // Using UNNotificationSound.default ensures the device provides haptic feedback (vibration).
+         
+        // Using UNNotificationSound.default ensures the device provides haptic feedback (vibration) per system settings.
         content.sound = UNNotificationSound.default
         
         let calendar = Calendar.current
