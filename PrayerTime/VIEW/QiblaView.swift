@@ -15,10 +15,6 @@ struct QiblaView: View {
             VStack(spacing: 66){
                 Spacer()
                 
-                
-
-                
-                
          //       Spacer()
                 HStack {
                     Text("القبلة")
@@ -26,8 +22,6 @@ struct QiblaView: View {
                         .fontWeight(.medium)
                         .foregroundColor(.white)
                     
-                    
-                  
                 }
                 Spacer()
                 ZStack {
@@ -56,8 +50,6 @@ struct QiblaView: View {
         }
     
     }
-    
-
     
 }
 

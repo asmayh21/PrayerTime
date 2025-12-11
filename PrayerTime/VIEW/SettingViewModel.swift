@@ -1,49 +1,72 @@
-//
-//  SettingMview.swift
-//  PrayerTime
-//
-//  Created by rawan alkhaldi  on 18/06/1447 AH.
-//
 // SettingViewModel.swift
 
 import Foundation
 import Combine
+import SwiftUI // ضرورية لـ @AppStorage
+
+// ----------------------------------------------------
+// 1. تعريف Enums المصححة لتجنب أخطاء التداخل
+// ----------------------------------------------------
+enum LanguageOption: String, CaseIterable, Identifiable {
+    case english = "English"
+    case arabic = "العربية"
+    var id: String { self.rawValue }
+    
+    // دالة مساعدة للحصول على كود اللغة
+    var code: String {
+        switch self {
+        case .english: return "en"
+        case .arabic: return "ar"
+        }
+    }
+}
+
+enum VibrationOption: String, CaseIterable, Identifiable {
+    case low = "Low"
+    case midum = "Midum"
+    case heavy = "Heavy"
+    var id: String { self.rawValue }
+}
+
+// ----------------------------------------------------
+// 2. كلاس SettingViewModel: ObservableObject
+// ----------------------------------------------------
 
 class SettingViewModel: ObservableObject {
     
-    // البيانات التي ستراقبها الواجهة (View)
-    @Published var selectedLanguage: Language = .english
-    @Published var selectedVibration: VibrationLevel = .midum
+    // ⭐️ 1. الخاصية الرئيسية: تخزين كود اللغة باستخدام @AppStorage (String) ⭐️
+    @AppStorage("appLanguageCode") var selectedAppLanguageCode: String = "ar"
     
-    // هذه خصائص القراءة فقط (Read-only) التي يمكن للواجهة استخدامها
-    let availableLanguages = Language.allCases
-    let availableVibrationLevels = VibrationLevel.allCases
+    // 2. خصائص الإعدادات الأخرى (باستخدام Enum الجديدة)
+    @Published var selectedVibration: VibrationOption = .midum
     
-    // دالة تهيئة (Initialization)
+    // 3. البيانات المتاحة
+    let availableLanguageOptions = LanguageOption.allCases
+    let availableVibrationLevels = VibrationOption.allCases
+    
     init() {
-        // هنا يمكن تحميل الإعدادات المحفوظة من UserDefaults أو قاعدة بيانات
-        loadSettings()
+        // تحميل اللغة الحالية عند التهيئة
+        if let currentLanguageArray = UserDefaults.standard.stringArray(forKey: "AppleLanguages"),
+           let currentLanguageCode = currentLanguageArray.first {
+            self.selectedAppLanguageCode = currentLanguageCode.prefix(2).lowercased()
+        }
     }
     
-    // دالة لتحميل الإعدادات (مثال)
-    private func loadSettings() {
-        // مثال: يتم تحميل آخر إعداد محفوظ هنا
-        // selectedLanguage = ...
-        // selectedVibration = ...
+    // ⭐️ 4. الدالة الرئيسية لتغيير اللغة في إعدادات النظام ⭐️
+    func changeAppLanguage(to languageCode: String) {
+        if selectedAppLanguageCode != languageCode {
+            
+            selectedAppLanguageCode = languageCode
+            
+            // 🛑 الخطوة الحاسمة: تحديث قائمة اللغات المفضلة للتطبيق 🛑
+            UserDefaults.standard.set([languageCode], forKey: "AppleLanguages")
+            UserDefaults.standard.synchronize()
+            
+            print("Language code set to: \(languageCode). App restart is required.")
+        }
     }
     
-    // دالة لحفظ الإعدادات عند تغييرها
-    func saveSettings() {
-        // هنا يتم حفظ selectedLanguage و selectedVibration
-        print("Settings saved: Language=\(selectedLanguage.rawValue), Vibration=\(selectedVibration.rawValue)")
-    }
-    
-    // عند تغيير أي قيمة، نقوم بتحديث الحفظ
-    func languageDidChange() {
-        saveSettings()
-    }
-    
-    func vibrationDidChange() {
-        saveSettings()
-    }
+    // دوال dummy للحفاظ على الهيكل
+    func loadSettings() { print("Settings loaded.") }
+    func saveSettings() { print("Settings saved.") }
 }
