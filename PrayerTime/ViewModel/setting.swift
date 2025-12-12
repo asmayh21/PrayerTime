@@ -96,8 +96,11 @@ struct setting: View {
                     }
                     .pickerStyle(.inline)
                     .frame(width: 355 , height: 120)
-                 //   .colorMultiply(darkBackground)
                     .tint(.white)
+                    // إطلاق الهزة فور تغيير الاختيار ليتأكد المستخدم أنها تعمل
+                    .onChange(of: viewModel.selectedVibration) { _ in
+                        HapticManager.instance.impactFromUserSetting()
+                    }
                     
                 }
                 .padding(.horizontal)
