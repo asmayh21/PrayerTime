@@ -11,18 +11,19 @@ class HapticManager {
     static let instance = HapticManager()
     
     #if os(watchOS)
-    // MARK: - watchOS Haptics (Composite Patterns)
+    // MARK: - watchOS Haptics (Repeated notification-style patterns)
     
     private func play(_ type: WKHapticType) {
         WKInterfaceDevice.current().play(type)
     }
     
-    // نمط عام لتكرار الهزات بعدد مرات وفاصل زمني
-    private func playPattern(types: [WKHapticType], interval: TimeInterval = 0.1) {
-        for (index, t) in types.enumerated() {
-            let delay = Double(index) * interval
+    // تكرار نوع هابتك معين لمدة محددة
+    private func repeatHaptic(type: WKHapticType, interval: TimeInterval, duration: TimeInterval) {
+        let repeats = Int(duration / interval)
+        for i in 0..<repeats {
+            let delay = Double(i) * interval
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-                self?.play(t)
+                self?.play(type)
             }
         }
     }
@@ -35,77 +36,66 @@ class HapticManager {
         play(style)
     }
     
-    // Read vibrationOption and play a stronger composite pattern on watchOS
+    // كل درجة = نوع هابتك مختلف
     func impactFromUserSetting() {
         let saved = UserDefaults.standard.string(forKey: "vibrationOption")
         switch saved {
         case "Low":
-            // نبضة خفيفة واحدة
-            play(.click)
+            // Success = .success
+            repeatHaptic(type: .success, interval: 0.5, duration: 3)
         case "Midum":
-            // نبضتان واضحتان
-            playPattern(types: [.success, .success], interval: 0.12)
+            // Warning ≈ .retry (أقرب متاح)
+            repeatHaptic(type: .retry, interval: 0.4, duration: 5)
         case "Heavy":
             fallthrough
         default:
-            // نمط أقوى: ثلاث نبضات notification
-            playPattern(types: [.notification, .notification, .notification], interval: 0.15)
+            // Error ≈ .failure
+            repeatHaptic(type: .failure, interval: 0.25, duration: 7)
         }
     }
     #else
-    // MARK: - iOS/iPadOS Haptics (Composite Patterns)
+    // MARK: - iOS/iPadOS Haptics (Repeated notification feedback)
     
-    private func notify(_ type: UINotificationFeedbackGenerator.FeedbackType) {
-        let generator = UINotificationFeedbackGenerator()
-        generator.prepare()
-        generator.notificationOccurred(type)
-    }
-    
-    private func impactOnce(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        let generator = UIImpactFeedbackGenerator(style: style)
-        generator.prepare()
-        generator.impactOccurred()
-    }
-    
-    // نمط عام لتكرار الاهتزازات بعدد مرات وفاصل زمني
-    private func impactPattern(styles: [UIImpactFeedbackGenerator.FeedbackStyle], interval: TimeInterval = 0.08) {
-        for (index, style) in styles.enumerated() {
-            let delay = Double(index) * interval
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-                self?.impactOnce(style)
+    // تكرار نوع نوتيفيكيشن فيدباك لمدة محددة
+    private func repeatNotificationFeedback(type: UINotificationFeedbackGenerator.FeedbackType, interval: TimeInterval, duration: TimeInterval) {
+        let repeats = Int(duration / interval)
+        for i in 0..<repeats {
+            let delay = Double(i) * interval
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                let generator = UINotificationFeedbackGenerator()
+                generator.prepare()
+                generator.notificationOccurred(type)
             }
         }
     }
     
     func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
-        notify(type)
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
+        generator.notificationOccurred(type)
     }
     
     func impact(style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        impactOnce(style)
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.prepare()
+        generator.impactOccurred()
     }
     
+    // كل درجة = نوع هابتك مختلف
     func impactFromUserSetting() {
         let saved = UserDefaults.standard.string(forKey: "vibrationOption")
         switch saved {
-            
         case "Low":
-            // نبضة خفيفة واحدة
-            impactOnce(.light)
+            // Success
+            repeatNotificationFeedback(type: .success, interval: 0.5, duration: 5)
         case "Midum":
-            // نبضتان: success ثم heavy قصيرة
-            notify(.success)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
-                self.impactOnce(.medium)
-            }
+            // Warning
+            repeatNotificationFeedback(type: .warning, interval: 0.4, duration: 5)
         case "Heavy":
             fallthrough
         default:
-            // نمط أقوى: success ثم ثلاث نبضات .heavy متتابعة
-            notify(.success)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
-                self.impactPattern(styles: [.heavy, .heavy, .heavy], interval: 0.1)
-            }
+            // Error
+            repeatNotificationFeedback(type: .error, interval: 0.25, duration: 5)
         }
     }
     #endif

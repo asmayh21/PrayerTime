@@ -38,6 +38,15 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
         // عرض الإشعار كـ banner مع صوت وشارة
         completionHandler([.banner, .sound, .badge])
     }
+
+    // يتم استدعاؤها عندما يضغط المستخدم على الإشعار ويفتح التطبيق
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        // تشغيل هابتك عند فتح التطبيق من الإشعار
+        HapticManager.instance.impactFromUserSetting()
+        completionHandler()
+    }
 }
 
 struct ContentView: View {
