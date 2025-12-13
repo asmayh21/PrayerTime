@@ -44,18 +44,17 @@ struct setting: View {
     @StateObject var viewModel = SettingViewModel()
     @StateObject var prayerViewModel = PrayerViewModel()
     
-    //let darkBackground = Color(red: 0.1, green: 0.1, blue: 0.2)
-    
-    // دالة الخلفية الديناميكية (لتجنب الاعتماد على تعريفات مفقودة)
-    var dynamicBackgroundView: some View {
-        // نستخدم لون ثابت مؤقت إذا كانت دالة createBackgroundGradient غير متوفرة
-        return Color(red: 0.05, green: 0.05, blue: 0.1).ignoresSafeArea()
-    }
+    // ⭐️ FIXED: Use the same dynamic background logic as PrayerTimesView ⭐️
+    @State private var backgroundType: BackgroundType = {
+        return initialBackgroundType()
+    }()
     
     var body: some View {
         
         ZStack {
-            dynamicBackgroundView
+            // ⭐️ FIXED: Use the actual dynamic gradient function ⭐️
+            createBackgroundGradient(for: backgroundType)
+                .ignoresSafeArea()
             
             VStack(alignment: .leading, spacing: 30) {
                 
@@ -110,7 +109,24 @@ struct setting: View {
             .padding(.top, 40)
         }
         .onAppear {
-             // prayerViewModel.load()
+            // ⭐️ FIXED: Update background based on current time when view appears ⭐️
+            backgroundType = initialBackgroundType()
+            
+            // Optional: Update background based on current prayer time
+            if let current = prayerViewModel.currentPrayer {
+                backgroundType = backgroundType(for: current)
+            }
+        }
+    }
+    
+    // ⭐️ Helper function to map prayer names to background types ⭐️
+    func backgroundType(for prayer: PrayerTime) -> BackgroundType {
+        switch prayer.name {
+        case "الفجر": return .fajr
+        case "العشاء": return .Isha
+        case "المغرب": return .Maghrib
+        case "العصر": return .asr
+        default: return .Dhuhr // Includes Dhuhr
         }
     }
 }
