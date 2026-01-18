@@ -23,9 +23,17 @@ struct PrayerTimeRow_WatchOS: View {
     var body: some View {
         HStack {
             // Smaller icon for watchOS
-            Image(systemName: "sun.max.fill")
-                .font(.system(size: 16))
-            
+            if name == "الظهر" || name == "العصر"  {
+                Image(systemName: "sun.max.fill")
+                    .font(.system(size: 20))
+            } else if name == "الفجر" || name == "المغرب" {
+                Image(systemName: "sun.horizon.fill")
+                    .font(.system(size: 20))
+            } else {
+                Image(systemName: "moon.fill")
+                    .font(.system(size: 20))
+            }
+
             Text(name)
                 .font(.system(size: 14, weight: .medium)) // Smaller font
             
