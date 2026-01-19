@@ -36,10 +36,10 @@ struct QiblaView_WatchOS: View { // Kept original name
                     // The custom HStack header is REMOVED because .navigationTitle handles the header.
                     
                     // Add current angle for information
-                    Text("\(Int(viewModel.qiblaAngle))°")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
+//                    Text("\(Int(viewModel.qiblaAngle))°")
+//                        .font(.title3)
+//                        .fontWeight(.bold)
+//                        .foregroundColor(.white)
                     // --- END HEADER REPLACEMENT ---
                     
                     ZStack {
@@ -69,7 +69,7 @@ struct QiblaView_WatchOS: View { // Kept original name
             } // End ScrollView
         }
 
-        .navigationTitle("القبلة")
+        .navigationTitle("القبلة").navigationBarTitleDisplayMode(.inline)
     
     }
 }
@@ -87,7 +87,7 @@ private struct KabaOnCircle: View {
         let x = radius * cos(radians)
         let y = radius * sin(radians)
         
-        return Image("kaba")
+        return Image("Kaba")
             .resizable()
             .scaledToFit()
             .frame(width: 40, height: 40)

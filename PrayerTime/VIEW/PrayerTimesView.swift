@@ -79,11 +79,13 @@ struct PrayerTimesView: View {
                     }
                     .padding(.horizontal, 24)
                     
-                    Text("الآن وقت صلاة \(viewModel.currentPrayer?.name ?? "...")")
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(.white)
-                        .padding(.top, 30)
-                        .padding(.bottom, 20)
+//                    Text("الآن وقت صلاة \(viewModel.currentPrayer?.name ?? "...")")
+//                        .font(.system(size: 20, weight: .medium))
+//                        .foregroundColor(.white)
+//                        .padding(.top, 30)
+//                        .padding(.bottom, 20)
+                    Text("")
+               
                     
                     VStack(spacing: 12) {
                         ForEach(prayers) { prayer in

@@ -139,19 +139,19 @@ struct PrayerTimesView_WatchOS: View {
                     }
                 }
             }.toolbar {
-                ToolbarItem(placement: .topBarLeading) { // Settings button on the leading side
-                    Button(action: {
-                        // Add navigation here
-                    }) {
-                        Image(systemName: "gearshape.fill")
-                            .font(.system(size: 16))
-                            .foregroundColor(.white.opacity(0.9))
-                            .frame(width: 35, height: 35)
-                            .background(Color.white.opacity(0.2))
-                            .clipShape(Circle())
-                    }
-                    .buttonStyle(.plain)
-                }
+//                ToolbarItem(placement: .topBarLeading) { // Settings button on the leading side
+//                    Button(action: {
+//                        // Add navigation here
+//                    }) {
+//                        Image(systemName: "gearshape.fill")
+//                            .font(.system(size: 16))
+//                            .foregroundColor(.white.opacity(0.9))
+//                            .frame(width: 35, height: 35)
+//                            .background(Color.white.opacity(0.2))
+//                            .clipShape(Circle())
+//                    }
+//                    .buttonStyle(.plain)
+//                }
                 
                 ToolbarItem(placement: .topBarTrailing) { // Qibla button on the trailing side
                     NavigationLink(destination: QiblaView_WatchOS()) {
